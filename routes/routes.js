@@ -1,24 +1,23 @@
-import express from "express";
-const routes = express.Router();
-import UserSchema from '../model/UserModel.js'
+// import express from "express";
+// const routes = express.Router();
+import registerController from '../controller/auth/registerController.js'
+import loginController from '../controller/auth/loginController.js'
 
-routes.get("/", (req, res) => {
-    res.json({
-        msg: "test",
-        lisence: "MIT"
-    })
-})
-
-routes.post("/register", async(req,res) => {
-    const newUser = new UserSchema(req.body);
-    try{
-        await newUser.save();
-        res.json({ msg: "user rester successfull"})
-    }catch(err){
-        console.log(err);
-    }
-})
-
-
+const routes = (app) => {
+    app.post("/register", registerController.register);
+    app.post("/login", loginController.login);
+}
 
 export default routes;
+
+
+
+//route
+// routes.get("/", )
+
+// controller
+// (req, res) => {
+//     res.json({
+//         msg: "test",
+//         lisence: "MIT"
+// })
