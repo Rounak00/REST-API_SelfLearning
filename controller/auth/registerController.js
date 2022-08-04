@@ -2,7 +2,7 @@ import UserSchema from "../../model/UserModel.js";
 import bcrypt from 'bcrypt';
 
 const registerController = {
-    async register(req,res) {
+    async register(req,res,next) {
         const { name, email, password } = req.body;
 
         // hash user password
@@ -19,7 +19,7 @@ const registerController = {
             await newUser.save();
             res.json({ msg: "user rester successfull"})
         }catch(err){
-            console.log(err);
+            next(err)
         }
     }
 }
