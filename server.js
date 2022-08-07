@@ -1,11 +1,13 @@
 import express from "express";
-import { PORT } from "./config/index.js";
-import connection from "./utils/connection.js";
+import { PORT } from "./config";
+import connection from "./utils/connection";
 const app = express();
-import routes from "./routes/routes.js";
-import errorHandler from './middleware/errorHandler.js'
+import routes from "./routes/routes";
+import errorHandler from './middleware/errorHandler'
 import cookieparser from 'cookie-parser';
+import cors from 'cors';
 
+app.use(cors())
 app.use(cookieparser());
 app.use(express.json()); // by default express or nodejs cannot understand json format
 // app.use("api/v1",routes)
@@ -25,7 +27,6 @@ app.use(routes);
 
 // error handler
 app.use(errorHandler);
-
 
 app.listen(PORT,
     async() => {

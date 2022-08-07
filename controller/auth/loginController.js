@@ -2,6 +2,7 @@ import UserSchema from "../../model/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../config/index.js';
+import customErrorHandler from "../../services/customErrorHandler.js";
 
 const loginController = {
 	async login(req, res,next) {
@@ -10,13 +11,13 @@ const loginController = {
 			// check user is exist or not
 			const isExist = await UserSchema.findOne({ email: req.body.email });
 			if (!isExist) {
-				return res.status(401).json({ msg: "create your account first" });
+				return next(customErrorHandler.unAuthorizedUser("User is not exist"))
 			}
 
 			// compare your password
 			const newUser = bcrypt.compareSync(req.body.password, isExist.password);
 			if (!newUser) {
-				return res.status(401).json({ msg: "your password is wrong" });
+				return next(customErrorHandler.wringCredentials())
 			}
 
 			// generate token
