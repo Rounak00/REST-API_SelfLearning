@@ -12,6 +12,10 @@ class customErrorHandler extends Error {
     static wringCredentials(message="your email and password is wrong") {
         return new customErrorHandler(401,message);
     };
+
+    static imageUploadIssue(messag="Issue during image upload"){
+        return new customErrorHandler(401, messag)
+    }
 }
 
 export default customErrorHandler;

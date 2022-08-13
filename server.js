@@ -6,7 +6,11 @@ import routes from "./routes/routes";
 import errorHandler from './middleware/errorHandler'
 import cookieparser from 'cookie-parser';
 import cors from 'cors';
+import path from 'path';
 
+
+global.appRoot = path.resolve(__dirname);
+app.use(express.urlencoded({ extended: false }));
 app.use(cors())
 app.use(cookieparser());
 app.use(express.json()); // by default express or nodejs cannot understand json format
