@@ -10,7 +10,8 @@ import path from 'path';
 
 
 global.appRoot = path.resolve(__dirname);
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false})); // used for understand img chunks
+
 app.use(cors())
 app.use(cookieparser());
 app.use(express.json()); // by default express or nodejs cannot understand json format
@@ -26,9 +27,7 @@ app.get("/", (req, res) => {
 })
 
 
-
 app.use(routes);
-
 // error handler
 app.use(errorHandler);
 

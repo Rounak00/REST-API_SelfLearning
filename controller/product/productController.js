@@ -1,75 +1,52 @@
 import ProductModel from "../../model/ProductModel.js";
 import UserSchema from "../../model/UserModel.js";
-import multer from "multer";
+import multer, { diskStorage } from "multer";
 import path from "path";
-import customErrorHandler from "../../services/customErrorHandler.js";
 import fs from 'fs';
+import customErrorHandler from "../../services/customErrorHandler.js";
 
+// diskStorage
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => cb(null, "uploads/"),
 	filename: (req, file, cb) => {
-		const uniqueName = `${Date.now()}-${Math.round(
+		// 1660889102382-97732441.jpg
+		const uniqueName = `${Date.now()} - ${Math.round(
 			Math.random() * 1e9
 		)}${path.extname(file.originalname)}`;
-        cb(null, uniqueName);
+
+        cb(null,uniqueName);
 	},
 });
 
-const handleMultipart = multer({
+const handleMultipartData = multer({
     storage,
-    limits: { fileSize: 1000000 * 5 }
+    limits: { fileSize: 1000000*5}
 }).single("image");
 
 
 const productController = {
-    async setProduct(req, res, next) {
-
-        handleMultipart(req,res, async(err) => {
+	async setProduct(req, res, next) {
+        handleMultipartData(req, res, async(err) => {
             if(err){
-                return next(customErrorHandler.imageUploadIssue(err.message))
+                return next(customErrorHandler.imageUploadIssue());
             }
+
+            const {name, price, type} = req.body;
             const filePath = req.file.path;
 
-
-            // product controller
-            const {productName, price, desc,type,image} = req.body;
-            const newProduct = new ProductModel({
-                productName, price, desc, type, image: filePath
-            });
-            try {
-                const saveProduct = await newProduct.save();
-                res.status(201).json(saveProduct);
-            } catch (err) {
-                // delete the file
+            try{
+                const newData = new ProductModel({
+                    name, price, type, image:filePath
+                });
+                const saveData = await newData.save();
+                res.json(saveData);
+            }catch(err) {
                 fs.unlink(`${appRoot}/${filePath}`, (err) => {
-                    if(err){
-                        console.log("Failed");
-                    }
+                    console.log("Deleted");
                 })
                 next(err);
             }
         })
-
-    },
-
-
-	async getProduct(req, res, next) {
-		try {
-			const result = await UserSchema.find();
-			res.json(result);
-		} catch (err) {
-			next(err);
-		}
-	},
-	async testQuery(req, res, next) {
-		const { min, max } = req.query;
-		console.log(min, "  ", max);
-		try {
-			const saveProduct = await ProductModel.find().sort({ price: -1 });
-			res.status(201).json(saveProduct);
-		} catch (err) {
-			next(err);
-		}
 	},
 };
 
