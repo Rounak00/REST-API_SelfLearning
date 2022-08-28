@@ -7,9 +7,10 @@ import customErrorHandler from "../../services/customErrorHandler.js";
 
 // diskStorage
 const storage = multer.diskStorage({
+    // cb is a general function, it's called call back
 	destination: (req, file, cb) => cb(null, "uploads/"),
 	filename: (req, file, cb) => {
-		// 1660889102382-97732441.jpg
+		// 1660889102382-97732441.png
 		const uniqueName = `${Date.now()} - ${Math.round(
 			Math.random() * 1e9
 		)}${path.extname(file.originalname)}`;
@@ -19,7 +20,7 @@ const storage = multer.diskStorage({
 });
 
 const handleMultipartData = multer({
-    storage,
+    storage:storage,
     limits: { fileSize: 1000000*5}
 }).single("image");
 
@@ -30,10 +31,10 @@ const productController = {
             if(err){
                 return next(customErrorHandler.imageUploadIssue());
             }
-
+            
             const {name, price, type} = req.body;
             const filePath = req.file.path;
-
+            
             try{
                 const newData = new ProductModel({
                     name, price, type, image:filePath

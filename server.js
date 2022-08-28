@@ -7,12 +7,16 @@ import errorHandler from './middleware/errorHandler'
 import cookieparser from 'cookie-parser';
 import cors from 'cors';
 import path from 'path';
+import bodyParser from "body-parser";
 
 
 global.appRoot = path.resolve(__dirname);
-app.use(express.urlencoded({ extended: false})); // used for understand img chunks
+// app.use(express.urlencoded({ extended: false})); // used for understand img chunks
 
-app.use(cors())
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(cors());
 app.use(cookieparser());
 app.use(express.json()); // by default express or nodejs cannot understand json format
 // app.use("api/v1",routes)
