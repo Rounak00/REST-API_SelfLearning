@@ -12,6 +12,6 @@ routes.post("/register", registerController.register);
 routes.post("/login", loginController.login);
 
 // product controller
-routes.post("/product", productController.setProduct);
+routes.post("/product", verifyAdmin,productController.setProduct);
 
 export default routes;
