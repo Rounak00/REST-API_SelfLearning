@@ -9,7 +9,7 @@ class customErrorHandler extends Error {
         return new customErrorHandler(401,message);
     };
 
-    static wringCredentials(message="your email and password is wrong") {
+    static wrongCredentials(message="your email and password is wrong") {
         return new customErrorHandler(401,message);
     };
 

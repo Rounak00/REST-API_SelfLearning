@@ -6,15 +6,12 @@ import fs from 'fs';
 import customErrorHandler from "../../services/customErrorHandler.js";
 
 // diskStorage
-const storage = multer.diskStorage({
+const storage = diskStorage({
     // cb is a general function, it's called call back
 	destination: (req, file, cb) => cb(null, "uploads/"),
 	filename: (req, file, cb) => {
 		// 1660889102382-97732441.png
-		const uniqueName = `${Date.now()} - ${Math.round(
-			Math.random() * 1e9
-		)}${path.extname(file.originalname)}`;
-
+		const uniqueName = `${Date.now()} - ${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`;
         cb(null,uniqueName);
 	},
 });
