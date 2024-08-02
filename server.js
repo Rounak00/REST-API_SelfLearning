@@ -9,7 +9,7 @@ import cors from 'cors';
 import path from 'path';
 import bodyParser from "body-parser";
 
-
+app.use('/uploads', express.static('uploads'));
 global.appRoot = path.resolve(__dirname);
 // app.use(express.urlencoded({ extended: false})); // used for understand img chunks
 
